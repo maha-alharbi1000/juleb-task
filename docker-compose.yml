@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  api:
+    container_name: task_api
+    restart: unless-stopped
+    image: task-api-prod:1.0.1
+    build: 
+      context: task-server
+      target: production
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - shared-network
+
+  client:
+    container_name: task_client
+    restart: unless-stopped
+    image: task-client-prod:1.0.1
+    build: 
+      context: task-front
+      target: production
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8100"
+    networks:
+      - shared-network
+    depends_on:
+      - api      
+
+networks:
+  shared-network:        
